@@ -4,3 +4,18 @@ author: "Alvaro Goncalves& Yonelvis Gonzalez"
 output: html_document
 ---
 
+```{r library}
+library(dplyr)
+library(knitr)
+library(DT)
+library(tidyr)
+```
+
+Trabajo final de computación I. Enfocado en el rango de edad de los pitchers con mejor efectividad con el dataset de " 2022 MLB Player Stats -Pitching"
+
+```{r data}
+#importamos la data que vamos a trabajar en este caso la del data set de los pitchers de la MLB de 2022
+mlb_players <- read.csv("C:/Users/JOSE ROJAS/OneDrive/Desktop/Yone/programaciones/2022 MLB Player Stats - Pitching.csv", sep = ";" )
+#Es necesario especificar que se separen los datos del archivo .csv para poder visualizarlos correctamente. Esto se hace mediante el uso se "sep = ";""
+```
+
