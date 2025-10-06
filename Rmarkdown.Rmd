@@ -1,0 +1,6 @@
+---
+title: "2022 MLB Player Stats - Trabajo final"
+author: "Alvaro Goncalves& Yonelvis Gonzalez"
+output: html_document
+---
+
