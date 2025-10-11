@@ -5,6 +5,9 @@ output:
   html_document:
      theme: readable
      highlight: haddock
+     toc: true
+     toc_float: true
+     code_folding: hide
 ---
 
 ```{r library, include=FALSE}
@@ -20,24 +23,25 @@ library(tidyr)
 
 ```{r data, include=FALSE}
 #importamos la data que vamos a trabajar en este caso la del data set de los pitchers de la MLB de 2022
-mlb_players <- read.csv("C:/Users/JOSE ROJAS/OneDrive/Desktop/Yone/programaciones/2022 MLB Player Stats - Pitching.csv", sep = ";", encoding = "latin1" )
+mlb_pitching <- read.csv("C:/Users/JOSE ROJAS/OneDrive/Desktop/Yone/programaciones/2022 MLB Player Stats - Pitching.csv", sep = ";", encoding = "latin1" )
 #Es necesario especificar que se separen los datos del archivo .csv para poder visualizarlos correctamente. Esto se hace mediante el uso se "sep = ";""
 ```
 
 ```{r ,include=FALSE}
-summary(mlb_players)
+summary(mlb_pitching)
 #Realizamos un Summary para identificar los cálculos estadísticas de cada uno
 ```
 
-## Planteamiento del problema
+# *Planteamiento del problema*
 
 Somos un grupo de scout para un nuevo equipo que se va a presentar en la nueva temporada de la MLB y consideramos que el pitcheo debe ser una de nuestras fortalezas y debemos verificar cuales son los mejores pitchers para que sean la base de nuestro proyecto y así afrontar la temporada de la mejor manera.
 
-## Objetivo Principal
+# *Objetivos de investigación*
+### *Objetivo Principal*
 
 Analizar en que rango de edad estuvieron los mejores pitchers de la temporada 2022 de la MLB.
 
-## Objetivos generales 
+### *Objetivos generales* 
 
 ##### -Visualizar si existe un patrón de lanzadores.
 ##### -Observar quienes tuvieron mejor resgistro considerando carreras limpias / juegos ganados.
@@ -45,4 +49,40 @@ Analizar en que rango de edad estuvieron los mejores pitchers de la temporada 20
 ##### -Pitchers con mejores Win-Loss%
 ##### -Pitchers con mejor ERA respecto a innings lanzados.
 
+
+
+# *Análisis de datos*
+
+tabla de datos faltantes
+
+```{r conteo_na, echo =FALSE}
+#creamos una variable que muestre la cantidad de datos faltantes (NA) en cada una de las columnas
+na_count <- mlb_pitching %>% summarise_all(list(n_na = ~sum(is.na(.))))
+datatable(na_count,
+          options = list(
+            scrollX = TRUE
+          ))
+#como podemos visualizar no hay ninún dato faltante
+```
+
+Ya asegurado la falta de NA en el dataset podemos visualizarlo   en su totalidad.
+
+```{r data table}
+datatable(mlb_pitching, 
+          options = list(
+    scrollX = TRUE, 
+    scrollY = "300px" 
+  ))
+```
+TOT significa que un jugador partticipo en más de un equipo en el transcurso de la liga por lo tanto para que los resultados no contengan duplicados se eliminara todas las filas que contengan dicho elemento en la sección de "Teams".
+
+```{r No TOT}
+mlb_players <- mlb_pitching %>% filter(Tm != "TOT")
+```
+
+### *Jugadores con mayor ERA vs jugadores con menor ERA*
+
+#```{r <ERA vs >ERA}
+mayor_era <- mlb_players %>% filter(ERA) %>% filter(IP)
+```
 
