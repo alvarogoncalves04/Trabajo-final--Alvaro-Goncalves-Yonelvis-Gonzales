@@ -1,5 +1,5 @@
 ---
-title: "Análisis de los Pitchers con mejor efectividad según su rango de edad"
+title: "Análisis de los Pitchers con mejor efectividad en la temporada 2022 de la MLB"
 author: "Alvaro Goncalves & Yonelvis Gonzalez"
 output:
   html_document:
@@ -15,6 +15,7 @@ library(dplyr)
 library(knitr)
 library(DT)
 library(tidyr)
+library(ggplot2)
 ```
 
 #### (con el dataset de " 2022 MLB Player Stats -Pitching")
@@ -34,38 +35,24 @@ summary(mlb_pitching)
 
 # *Planteamiento del problema*
 
-Somos un grupo de scout para un nuevo equipo que se va a presentar en la nueva temporada de la MLB y consideramos que el pitcheo debe ser una de nuestras fortalezas y debemos verificar cuales son los mejores pitchers para que sean la base de nuestro proyecto y así afrontar la temporada de la mejor manera.
+Somos un grupo de scouts que busca analizar a los pitchers con mayor efectividad de la temporada 2022 de la MLB. El rendimiento de los jugadores es la base del analisis de cualquier equipo y por lo tanto queremos observar si existen alguna relación entre la efectividad y la participación de un jugador con respecto a su edad. 
 
 # *Objetivos de investigación*
 ### *Objetivo Principal*
 
-Analizar en que rango de edad estuvieron los mejores pitchers de la temporada 2022 de la MLB.
+Visualizar el comportamiento de los pitchers con mayor participación en la temporada 2022 de la MLB.
 
 ### *Objetivos generales* 
 
-##### -Visualizar si existe un patrón de lanzadores.
-##### -Observar quienes tuvieron mejor resgistro considerando carreras limpias / juegos ganados.
-##### -Ver que equipo tuvo el mejor roster ese año 2022.
-##### -Pitchers con mejores Win-Loss%
+##### -Observar si existe una relación entre las entradas lanzadas y la edad.
+##### -Visualizar el top 5 de mejores pitchers de acuerdo al WHIP con respecto a la edad.
+##### -Observar el top 5 de mejores pitchers de acuerdo a ERA con respecto a la edad.
+##### -Observar si existe una relación entre los pitchers con menor ERA con respecto a partidos ganados
 ##### -Pitchers con mejor ERA respecto a innings lanzados.
-
-
 
 # *Análisis de datos*
 
-tabla de datos faltantes
-
-```{r conteo_na, echo =FALSE}
-#creamos una variable que muestre la cantidad de datos faltantes (NA) en cada una de las columnas
-na_count <- mlb_pitching %>% summarise_all(list(n_na = ~sum(is.na(.))))
-datatable(na_count,
-          options = list(
-            scrollX = TRUE
-          ))
-#como podemos visualizar no hay ninún dato faltante
-```
-
-Ya asegurado la falta de NA en el dataset podemos visualizarlo   en su totalidad.
+En este datatable podemos visualizar la información sin ningún filtro ni cambio realizado.
 
 ```{r data table}
 datatable(mlb_pitching, 
@@ -74,15 +61,45 @@ datatable(mlb_pitching,
     scrollY = "300px" 
   ))
 ```
-TOT significa que un jugador partticipo en más de un equipo en el transcurso de la liga por lo tanto para que los resultados no contengan duplicados se eliminara todas las filas que contengan dicho elemento en la sección de "Teams".
+TOT significa que un jugador participo en más de un equipo en el transcurso de la liga por lo tanto para evitar tomar valores erroneos realizamos una nueva dataframe en donde filtramos, mediante los nombres de los jugadores, su rendimiento individual. Es decir su participación, whip, ERA y partidos ganados.
 
-```{r No TOT}
-mlb_players <- mlb_pitching %>% filter(Tm != "TOT")
+```{r filtro para calcular los recuentos completos del rendimiento de los jugadores}
+is.na <- 0
+rango_ip <- 50
+#establecemos un rango para dividir en grupos a los jugadores en este caso los que tengan mayor IP y menor ERA demostraran tener un muy buen rendimiento
+mlb_players <- mlb_pitching %>% group_by(Name) %>%
+  filter(n() == 1 | Tm == "TOT") %>% ungroup() %>% filter(!is.na(ERA)& is.finite(ERA) & IP >= rango_ip & !is.na(IP)) %>% 
+  select(
+    Name, 
+    Age, 
+    IP, 
+    ERA,
+    WHIP,
+    W, 
+    L,
+    G,
+  ) %>% arrange(ERA)
+datatable(mlb_players, options = list(
+            scrolly = "300px"))
+#agrupamos por nombre y nos aseguramos que el nombre de un jugador solo tenga una entrada de valor, de esta manera para los jugadores que participaron en varios equipos se les tomara su columna con TOT para así evaluar por completo su rendimiento.
+#aplicamos nuestro rango de innings pitched y aclaramos que la fila de ERA es una cantidaD finita para evitar cualquier error de calculo
+#seleccionamos todas las filas (a excepción de equipos)
+```
+Una vez filtrado podemos comenzar con el verdadero analisis de este trabajo de investigación.
+
+## *Innings en base a la edad de los jugadores*
+
+```{r grafica1}
+ggplot(mlb_players, aes(x = Age, y = IP, fill())) + 
+  geom_point() +
+  stat_ellipse(type = "t") +
+  stat_ellipse(type = "norm", linetype = 2) + labs(title = "Relación entre los IP y la edad de los pitchers",  x = "Edad de los pitchers", y = "Innings pitched/entradas lanzadas") +
+  theme_grey()
 ```
 
-### *Jugadores con mayor ERA vs jugadores con menor ERA*
 
-#```{r <ERA vs >ERA}
-mayor_era <- mlb_players %>% filter(ERA) %>% filter(IP)
-```
+Podemos visualizar que en el rango de edad donde se registraron mayor cantidad de inning/ entradas lanzadas fue entre los 25 a 30 años de edad, concentrandose con mayor frecuencia en un rango de entre 50 a 100 inning / entradas lanzadas.
+
+En base a esto los cálculos del trabajo estaran centrados en los los pitchers con una edad de entre 25 a 30 años de edad que mantengan una cantidad de entradas lanzadas de entre 50 a 100 debido a que se ha observado que es donde los valores tienen mayor concentración con respecto a el total de datos.
+
 
