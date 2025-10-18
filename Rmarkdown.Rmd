@@ -93,7 +93,7 @@ Una vez filtrado podemos comenzar con el verdadero analisis de este trabajo de i
 ggplot(mlb_players, aes(x = Age, y = IP, fill())) + 
   geom_point() +
   stat_ellipse(type = "t") +
-  stat_ellipse(type = "norm", linetype = 2) + labs(title = "Relación entre las entradas lanzadas y la edad",  x = "Edad de los pitchers", y = "Innings pitched/entradas lanzadas") +
+  stat_ellipse(type = "norm", linetype = 2) + labs(title = "Relacion entre las entradas lanzadas y la edad",  x = "Edad de los pitchers", y = "Innings pitched/entradas lanzadas") +
   theme_grey()
 ```
 
@@ -104,7 +104,7 @@ En base a esto los cálculos del trabajo estaran centrados en los los pitchers c
 
 ## Top 5 de mejores pitchers de acuerdo al WHIP con respecto a la edad.
 
-```{r top5}
+```{r top5 whip}
 top_5whip <- mlb_players %>% arrange(WHIP, Age) %>% head(5)
 datatable(top_5whip)
 ggplot(top_5whip, aes(x = Age, y = WHIP, fill())) + 
@@ -136,7 +136,7 @@ ggplot(top_5whip, aes(x = reorder(Name, WHIP), y = WHIP)) +
 
 Con respecto a los resultados en las graficas podemos concluir que el mejor jugador de acuerdo a su Whip es Emmanuel Clase con un WHip de 0,729 lo que significa que el lanzador está permitiendo, en promedio, menos de tres cuartos de corredor por entrada lanzada lo cual es bastante impresionante considerando que también es el jugador con mayor cantidad de innings pitched y siendo el pitcher más joven con solo 24 años de edad.
 
-sin embargo los resultados no suponen la existencia entre una correlación directa entre ambas variables (Whip y edad).
+sin embargo los resultados no suponen la existencia entre una correlación directa entre ambas variables (Whip y edad) para asegurarnos de esto vamos a visualizar al total de pitchers y evaluar su whip junto a su edad.
 
 ```{r grafica 3}
 ggplot(mlb_players, aes(x = Age, y = WHIP)) + 
@@ -145,4 +145,49 @@ ggplot(mlb_players, aes(x = Age, y = WHIP)) +
   stat_ellipse(type = "norm", linetype = 5) + labs(title = "Relación entre el Whip y la edad",  x = "Edad de los pitchers", y = "WHIP") +
   theme_minimal()
 ```
+
+Efectivamente en este grafico no se puedevisualizar ningún tipo de correlación entre ambas variables.
+
+## Observar el top 5 de mejores pitchers de acuerdo a ERA con respecto a la edad.
+
+```{r top5era}
+top_5era <- mlb_players %>% arrange(ERA, Age) %>% head(5)
+datatable(top_5era)
+ggplot(top_5era, aes(x = Age, y = ERA)) + 
+  geom_point() +
+  stat_ellipse(type = "t") +
+  stat_ellipse(type = "norm", linetype = 5) + labs(title = "Relacion entre la ERA y la edad",  x = "Edad de los pitchers", y = "ERA") +
+  theme_minimal()
+```
+
+```{r grafico 4}
+ggplot(top_5era, aes(x = reorder(Name, ERA), y = ERA)) +
+  geom_col(fill = "steelblue") + geom_text(
+    aes(label = paste0("ERA: ", ERA, "\nEdad: ", Age)),
+    vjust = -0.5, # Ajusta la posición vertical (un poco arriba de la barra)
+    size = 3.5
+  ) + labs(
+    title = "Top 5 Pitchers por ERA y Edad",
+    subtitle = "ERA mas bajo, desempatado por menor edad",
+    x = "Pitcher",
+    y = "Mejores ERA"
+  ) +
+  
+  # Un tema limpio
+  theme_minimal() + ylim(0, max(top_5era$ERA) * 1.15)
+#se ajusta un limite para la altura de y
+
+```
+
+Al igual que ocurrio con el Whip, la ERA no parece tener una relación directa con la edad de los jugadores. Por eso de igual manera se corroborara con el total de jugadores.
+
+```{r grafica 5}
+ggplot(mlb_players, aes(x = Age, y = ERA)) + 
+  geom_point() +
+  stat_ellipse(type = "t") +
+  stat_ellipse(type = "norm", linetype = 5) + labs(title = "Relacion entre la ERA y la edad",  x = "Edad de los pitchers", y = "ERA") +
+  theme_minimal()
+```
+
+Al igual que en el caso anterior no se puede evidenciar una correlación directa de ningun tipo entre ambas variables.
 
