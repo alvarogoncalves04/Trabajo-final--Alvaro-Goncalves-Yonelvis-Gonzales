@@ -203,4 +203,13 @@ ggplot(era_vic, aes(x = ERA, y = G)) +
   theme_minimal()
 ```
 
+En primer lugar se puede observar claramente que la mayor cantidad de juegos ganados se encuentra entre los jugadores con una ERA de entre 1,14 hasta 3. 
+
+##  *Pitchers con mejor ERA respecto a innings lanzados.*
+
+```{r ERA IP}
+era_ip <- mlb_players %>% arrange(ERA, IP)
+
+datatable(era_ip)
+```
 
