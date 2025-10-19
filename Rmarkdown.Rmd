@@ -102,7 +102,7 @@ Podemos visualizar que en el rango de edad donde se registraron mayor cantidad d
 
 En base a esto los cálculos del trabajo estaran centrados en los los pitchers con una edad de entre 25 a 30 años de edad que mantengan una cantidad de entradas lanzadas de entre 50 a 100 debido a que se ha observado que es donde los valores tienen mayor concentración con respecto a el total de datos.
 
-## Top 5 de mejores pitchers de acuerdo al WHIP con respecto a la edad.
+## *Top 5 de mejores pitchers de acuerdo al WHIP con respecto a la edad.*
 
 ```{r top5 whip}
 top_5whip <- mlb_players %>% arrange(WHIP, Age) %>% head(5)
@@ -148,7 +148,7 @@ ggplot(mlb_players, aes(x = Age, y = WHIP)) +
 
 Efectivamente en este grafico no se puedevisualizar ningún tipo de correlación entre ambas variables.
 
-## Observar el top 5 de mejores pitchers de acuerdo a ERA con respecto a la edad.
+## *Observar el top 5 de mejores pitchers de acuerdo a ERA con respecto a la edad.*
 
 ```{r top5era}
 top_5era <- mlb_players %>% arrange(ERA, Age) %>% head(5)
@@ -190,4 +190,17 @@ ggplot(mlb_players, aes(x = Age, y = ERA)) +
 ```
 
 Al igual que en el caso anterior no se puede evidenciar una correlación directa de ningun tipo entre ambas variables.
+
+## *Relación entre los pitchers con menor ERA con respecto a partidos ganados.*
+
+```{r Era con G}
+era_vic <- mlb_players %>% arrange(ERA, G)
+datatable(era_vic)
+
+ggplot(era_vic, aes(x = ERA, y = G)) + 
+  geom_point() +
+  labs(title = "Relacion entre la ERA y los juegos ganados",  x = "ERA", y = "Juegos ganados") +
+  theme_minimal()
+```
+
 
