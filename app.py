@@ -28,5 +28,23 @@ def load_data():
     return df
 data = load_data()
 df = data.copy()
+# barra lateral para filtrar por noombre de jugador
+# Título principal
+st.title("📊 Estadísticas de Jugadores")
+
+# 🎯 Barra lateral de streamlit para seleccionar equipo y columnas estadísticas
+st.title("📊 Estadísticas de Jugadores por Equipo")
+
+# 🎯 Selección de equipo
+equipos = df_limpio['Team'].unique()
+equipo_seleccionado = st.sidebar.selectbox("Selecciona un equipo", equipos)
+
+# 🧩 Selección de columnas estadísticas
+columnas_disponibles = df_limpio.columns.drop(['Name', 'Team'])  # Excluye nombre y equipo
+columnas_seleccionadas = st.sidebar.multiselect(
+    "Selecciona estadísticas a mostrar",
+    columnas_disponibles,
+    default=columnas_disponibles  # Opcional: mostrar todas por defecto
+)
 
 
