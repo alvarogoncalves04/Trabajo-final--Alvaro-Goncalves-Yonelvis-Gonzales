@@ -35,20 +35,21 @@ summary(mlb_pitching)
 
 # *Planteamiento del problema*
 
-Somos un grupo de scouts que busca analizar a los pitchers con mayor efectividad de la temporada 2022 de la MLB. El rendimiento de los jugadores es la base del analisis de cualquier equipo y por lo tanto queremos observar si existen alguna relación entre la efectividad y la participación de un jugador con respecto a su edad. 
+Somos un grupo de aficionados que busca analizar a los pitchers con mayor efectividad de la temporada 2022 de la MLB. El rendimiento de los jugadores es la base del análisis sobre cualquier equipo y por lo tanto se desea observar la existencia de una relación entre el comportamiento y participación de un jugador con respecto a su edad.
 
 # *Objetivos de investigación*
 ### *Objetivo Principal*
 
-Visualizar el comportamiento de los pitchers con mayor participación en la temporada 2022 de la MLB.
+Analizar el comportamiento de los pitcher con mayor participación en la temporada 2022 de la MLB para evaluar la existencia de alguna relación con respecto a su efectividad. Utilizando las métricas ERA y WHIP para evaluar la efectividad de los jugadores y IP (Innings pitched).
 
 ### *Objetivos generales* 
 
-##### -Observar si existe una relación entre las entradas lanzadas y la edad.
-##### -Visualizar el top 5 de mejores pitchers de acuerdo al WHIP con respecto a la edad.
-##### -Observar el top 5 de mejores pitchers de acuerdo a ERA con respecto a la edad.
-##### -Observar si existe una relación entre los pitchers con menor ERA con respecto a partidos ganados
-##### -Pitchers con mejor ERA respecto a innings lanzados.
+##### -Determinar si existe una correlación estadísticamente significativa entre participación (medida en IP) y la edad de los pitchers con mayor participación (con un IP > 50) en la temporada 2022 de la MLB.
+#####	-Identificar y comparar las métricas de efectividad (ERA y WHIP) y edad del grupo de pitchers con mayor volumen de IP frente al promedio de la liga en 2022.
+#####	-Evaluar la relación entre la carga de trabajo (IP) y la efectividad independiente en el “fildeo” (FIP)  para garantizar un análisis completo del rendimiento individual de los pitchers con mayor participación.
+#####	-Evaluar la relación de efectividad (ERA) con la métrica de durabilidad (IP) para identificar a los pitchers más eficientes de acuerdo a su participación
+#####	-Clasificar el top 10 de los pitchers con mayor participación en la MLB 2022, ordenándolos según su WHIP para identificar los más en control de hits & walks.
+
 
 # *Análisis de datos*
 
