@@ -46,5 +46,18 @@ columnas_seleccionadas = st.sidebar.multiselect(
     columnas_disponibles,
     default=columnas_disponibles  # Opcional: mostrar todas por defecto
 )
+# Indicador 
+# Filtrar si lo deseas (ejemplo: pitchers con más de 50 IP)
+df_filtrado = df[df['IP'] > 50]
 
+# Calcular métricas
+era_promedio = round(df_filtrado['ERA'].mean(), 2)
+fip_promedio = round(df_filtrado['FIP'].mean(), 2)
+whip_promedio = round(df_filtrado['WHIP'].mean(), 2)
 
+# Mostrar indicadores
+st.subheader("Indicadores de Rendimiento")
+col1, col2, col3 = st.columns(3)
+col1.metric(label="ERA Promedio", value=era_promedio)
+col2.metric(label="FIP Promedio", value=fip_promedio)
+col3.metric(label="WHIP Promedio", value=whip_promedio)
