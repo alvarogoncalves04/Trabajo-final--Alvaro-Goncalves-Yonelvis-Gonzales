@@ -25,34 +25,15 @@ st.set_page_config(
 def load_data():
     df = pd.read_csv('datap.csv', sep=';', encoding='latin-1')
     return df
-    df = load_data().dropna()  # Eliminar filas con valores nulos
-    return df
-data = load_data()
-df = data.copy()
-st.write(df.head())
-
-print(len(df.columns))
-df.columns.tolist()  
- 
-# Limpieza de datos
-# Verificamos si hay valores nulos
-st.write(df.isnull().sum())
-# Eliminamos filas con valores nulos
-df.dropna(inplace=True)
-st.write(df.isnull().sum())
-st.write(df.shape)
-# Reiniciamos el índice después de eliminar filas
-df.reset_index(drop=True, inplace=True)
-st.write(df.shape)
-st.write(df.head())
-
+df = load_data()
+    
+markdown = """Columnas que necesitamos para el análisis:
+"""
+st.markdown(markdown)
 # Seleccionar solo las columnas que necesitas
 columnas_necesarias = ['Name', 'Tm', 'IP', 'ERA', 'WHIP', 'Age']
 df_filtrado = df[columnas_necesarias]
-st.write(df_filtrado.shape)
 
-# Mostrar las primeras filas para verificar
-print(df_filtrado.head())
 
 #Filtro de rango de edad con innings lanzados mayor a 50
 df_limpio = df_filtrado[
@@ -76,6 +57,10 @@ df['Categoria']
 st.title("📊 Estadísticas de Jugadores por Equipo")
 
 # 🎯 Selección de equipo
+markdown ="""Escoge tu equipo del lado izquiero para obtener datos sobre el
+"""
+st.markdown(markdown)
+
 equipos = df_limpio['Tm'].unique()
 equipo_seleccionado = st.sidebar.selectbox("Selecciona un equipo", equipos)
 
@@ -121,17 +106,27 @@ st.write("---")
 # Gráficos de análisis
 
 markdown = """Graficos por objetivos:
+
 -Determinar si existe una correlación estadísticamente significativa entre participación (medida en IP) y la edad de los pitchers con mayor participación (con un IP > 50) en la temporada 2022 de la MLB.
+
 -Identificar y comparar las métricas de efectividad (ERA y WHIP) y edad del grupo de pitchers con mayor volumen de IP frente al promedio de la liga en 2022.
+
 -Evaluar la relación entre la participación (IP) y la efectividad independiente en el “fildeo” (FIP) para garantizar un análisis completo del rendimiento individual de los pitchers con mayor participación.
+
 -Evaluar la relación de efectividad (ERA) con la métrica de durabilidad/participación (IP) para identificar la eficiencia.
+
 -Clasificar el top 10 de los pitchers con mayor participación en la MLB 2022, ordenándolos según su Whip.
+
 -Clasificar el top 10 de los pitchers con mayor participación en la MLB 2022, ordenándolos según su ERA.
 """
 st.markdown(markdown)
 st.title("📈 Análisis Gráfico de Pitchers de la MLB 2022"
          )
-#Grafico: Relacion Edad vs Innings Pitched (IP)
+
+markdown = """Relación Edad vs Innings Pitched (IP)"""
+st.markdown(markdown)
+
+#Grafico: Relación Edad vs Innings Pitched (IP)
 df_fig1 = df[(df['Age'] > 20) & (df['IP'] > 50)]
 
 # Crear gráfico de dispersión
@@ -152,6 +147,10 @@ plt.show()
 st.pyplot(plt)
 
 
+markdown = """Relacion Innings Pitched (IP) vs Edad con linea de regresion"""
+st.markdown(markdown)
+
+
 #Grafico: Relacion Innings Pitched (IP) vs Edad con linea de regresion
 df_filtrado = df[df['IP'] > 50]
 
@@ -167,7 +166,15 @@ plt.grid(True)
 plt.tight_layout()
 plt.show()
 st.pyplot(plt)
-st.markdown("**Conclusión Gráfico 2:** El gráfico de dispersión con línea de regresión muestra una ligera tendencia positiva entre las entradas lanzadas (IP) y la edad de los pitchers en la MLB 2022. Esto sugiere que, en general, los pitchers más experimentados tienden a lanzar más entradas, aunque la correlación no es muy fuerte.")
+
+
+st.markdown(" El gráfico de dispersión con línea de regresión muestra una ligera tendencia positiva entre las entradas lanzadas (IP) y la edad de los pitchers en la MLB 2022. Esto sugiere que, en general, los pitchers más experimentados tienden a lanzar más entradas, aunque la correlación no es muy fuerte.")
+
+
+
+markdown = """Mejores pitchers por edad según su whip"""
+st.markdown(markdown)
+
 
 #Grafico: Rango de mejores pitchers por edad según su whip
 df_fig2 = df[(df['Age'] > 20) & (df['WHIP'] < 1.5)]
@@ -184,7 +191,12 @@ plt.xlim(20, 42)
 plt.show()
 st.pyplot(plt)
 
-st.markdown("**Conclusión Gráfico 3:** El gráfico de dispersión muestra que los pitchers más jóvenes tienden a tener un WHIP más bajo. A medida que la edad aumenta, se observa una ligera tendencia al alza en el WHIP, sugiriendo que los pitchers más veteranos pueden enfrentar más dificultades para mantener a los corredores fuera de las bases. Un whip por debajo de 1.00 se considera excelente, mientras que un whip que se encuentra cercano a 1.5 se considera promedio.  Se ve como entre 25 y 35 años se encuentran los pitchers con mejor whip.")
+
+st.markdown(" El gráfico de dispersión muestra que los pitchers más jóvenes tienden a tener un WHIP más bajo. A medida que la edad aumenta, se observa una ligera tendencia al alza en el WHIP, sugiriendo que los pitchers más veteranos pueden enfrentar más dificultades para mantener a los corredores fuera de las bases. Un whip por debajo de 1.00 se considera excelente, mientras que un whip que se encuentra cercano a 1.5 se considera promedio.  Se ve como entre 25 y 35 años se encuentran los pitchers con mejor whip.")
+
+
+markdown = """Peores pitchers respecto a su WHIP y edad"""
+st.markdown(markdown)
 
 # Filtrar los peores pitchers respecto a su WHIP y edad
 df_fig4 = df[(df['Age'] > 20) & (df['WHIP'] > 2.00)]
@@ -210,6 +222,10 @@ else:
     plt.show()
     st.pyplot(plt)
 
+
+markdown = """Rango de mejores pitchers por edad según su ERA"""
+st.markdown(markdown)
+
 #Rango de mejores pitchers por edad según su ERA
 df_fig3 = df[(df['Age'] > 20) & (df['ERA'] < 4.00)]
 # Crear gráfico de dispersión       
@@ -224,6 +240,10 @@ plt.xlim(20, 42)
 # Mostrar
 plt.show()
 st.pyplot(plt)
+
+
+markdown = """Filtro de los peores pitchers por edad según su ERA"""
+st.markdown(markdown)
 
 # Filtrar los peores pitchers
 df_fig5 = df[(df['Age'] > 20) & (df['ERA'] > 6.00)]
@@ -249,6 +269,10 @@ else:
     plt.show()
     st.pyplot(plt)
 
+
+markdown = """Relacion Innings Pitched (IP) vs FIP"""
+st.markdown(markdown)
+
 # Grafico: Relacion Innings Pitched (IP) vs FIP
 # Filtrar pitchers con mayor participación (por ejemplo, IP > 50)
 df_mayor_participacion = df[df['IP'] > 50]
@@ -266,6 +290,10 @@ plt.grid(True)
 plt.tight_layout()
 plt.show()
 st.pyplot(plt)
+
+
+markdown = """Distribución del FIP según Rangos de IP"""
+st.markdown(markdown)
 
 # Gráfico: Caja: Distribución del FIP según Rangos de IP
 # Filtrar pitchers con IP > 50
@@ -287,6 +315,12 @@ plt.tight_layout()
 st.pyplot(plt)
 plt.show()
 
+
+
+markdown = """Top 10 mejores pitchers por WHIP"""
+st.markdown(markdown)
+
+
 #Grafico: Top 10 pitchers por WHIP
 # Filtrar los pitchers con mayor participación (IP más alto)
 df_top_ip = df.sort_values(by='IP', ascending=False).head(30)  # puedes ajustar el número si lo deseas
@@ -307,6 +341,9 @@ plt.ylabel('Pitcher')
 plt.tight_layout()
 plt.show()
 st.pyplot(plt)
+
+markdown = """Top 10 mejores pitchers por ERA"""
+st.markdown(markdown)
 
 #Grafico: Top 10 pitchers por ERA
 # Filtrar los pitchers con mayor participación (IP más alto)
