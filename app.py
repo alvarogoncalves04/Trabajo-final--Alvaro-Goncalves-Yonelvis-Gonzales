@@ -184,7 +184,7 @@ plt.xlim(20, 42)
 plt.show()
 st.pyplot(plt)
 
-st.markdown("**Conclusión Gráfico 3:** El gráfico de dispersión muestra que los pitchers más jóvenes tienden a tener un WHIP más bajo. A medida que la edad aumenta, se observa una ligera tendencia al alza en el WHIP, sugiriendo que los pitchers más veteranos pueden enfrentar más dificultades para mantener a los corredores fuera de las bases.")Un whip por debajo de 1.00 se considera excelente, mientras que un whip que se encuentra cercano a 1.5 se considera promedio.  Se ve como entre 25 y 35 años se encuentran los pitchers con mejor whip.
+st.markdown("**Conclusión Gráfico 3:** El gráfico de dispersión muestra que los pitchers más jóvenes tienden a tener un WHIP más bajo. A medida que la edad aumenta, se observa una ligera tendencia al alza en el WHIP, sugiriendo que los pitchers más veteranos pueden enfrentar más dificultades para mantener a los corredores fuera de las bases. Un whip por debajo de 1.00 se considera excelente, mientras que un whip que se encuentra cercano a 1.5 se considera promedio.  Se ve como entre 25 y 35 años se encuentran los pitchers con mejor whip.")
 
 # Filtrar los peores pitchers respecto a su WHIP y edad
 df_fig4 = df[(df['Age'] > 20) & (df['WHIP'] > 2.00)]
