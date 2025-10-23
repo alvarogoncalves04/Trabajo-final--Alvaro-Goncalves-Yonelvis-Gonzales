@@ -50,4 +50,5 @@ D. Clasificación (Objetivos 5, 5.1)
 El estudio concluirá con una clasificación descriptiva del grupo de élite, utilizando las métricas de efectividad de ERA y WHIP para determinar quiénes fueron los más dominantes en el grupo de alta carga de trabajo.
 
 Informe interactivo markdown:https://trabajo-final-alvaro-goncalves-yonelvis-o4md.onrender.com 
+
 Informe interactivo python:https://trabajo-final-alvaro-goncalves-yonelvis-lx64.onrender.com
