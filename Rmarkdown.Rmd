@@ -16,6 +16,7 @@ library(knitr)
 library(DT)
 library(tidyr)
 library(ggplot2)
+library(ggExtra)
 ```
 
 #### (con el dataset de " 2022 MLB Player Stats -Pitching")
@@ -37,23 +38,69 @@ summary(mlb_pitching)
 
 Somos un grupo de aficionados que busca analizar a los pitchers con mayor efectividad de la temporada 2022 de la MLB. El rendimiento de los jugadores es la base del análisis sobre cualquier equipo y por lo tanto se desea observar la existencia de una relación entre el comportamiento y participación de un jugador con respecto a su edad.
 
-# *Objetivos de investigación*
+## *Objetivos de investigación*
 ### *Objetivo Principal*
 
 Analizar el comportamiento de los pitcher con mayor participación en la temporada 2022 de la MLB para evaluar la existencia de alguna relación con respecto a su efectividad. Utilizando las métricas ERA y WHIP para evaluar la efectividad de los jugadores y IP (Innings pitched).
 
-### *Objetivos generales* 
+### *Objetivos específicos* 
 
-##### -Determinar si existe una correlación estadísticamente significativa entre participación (medida en IP) y la edad de los pitchers con mayor participación (con un IP > 50) en la temporada 2022 de la MLB.
-#####	-Identificar y comparar las métricas de efectividad (ERA y WHIP) y edad del grupo de pitchers con mayor volumen de IP frente al promedio de la liga en 2022.
-#####	-Evaluar la relación entre la carga de trabajo (IP) y la efectividad independiente en el “fildeo” (FIP)  para garantizar un análisis completo del rendimiento individual de los pitchers con mayor participación.
-#####	-Evaluar la relación de efectividad (ERA) con la métrica de durabilidad (IP) para identificar a los pitchers más eficientes de acuerdo a su participación
-#####	-Clasificar el top 10 de los pitchers con mayor participación en la MLB 2022, ordenándolos según su WHIP para identificar los más en control de hits & walks.
+#### 1-Determinar si existe una correlación estadísticamente significativa entre participación (medida en IP) y la edad de los pitchers con mayor participación (con un IP > 50) en la temporada 2022 de la MLB.
+####	2-Identificar y comparar las métricas de efectividad (ERA y WHIP) y edad del grupo de pitchers con mayor volumen de IP frente al promedio de la liga en 2022.
+####	3-Evaluar la relación entre la participación (IP) y la efectividad independiente en el “fildeo” (FIP)  para garantizar un análisis completo del rendimiento individual de los pitchers con mayor participación.
+####	4-Evaluar la relación de efectividad (ERA) con la métrica de durabilidad/participación (IP) para identificar la eficiencia.
+####	5-Clasificar el top 10 de los pitchers con mayor participación en la MLB 2022, ordenándolos según su Whip.
+####	5.1-Clasificar el top 10 de los pitchers con mayor participación en la MLB 2022, ordenándolos según su ERA.
 
+# ⚾️ Marco Teórico
+## **I.Fundamentos:** 
+
+El análisis se basará en la distinción entre las métricas de rendimiento que incluyen la influencia defensiva y las que son independientes de ella.
+
+
+### **A. Métricas de Efectividad:**
+Estas métricas son las que nos permiten poder tener una noción de la efectividad de un jugador y las que se desean evaluar en relación con la participación y su edad.
+
+**ERA (Earned Run Average):** Promedio de carreras limpias permitidas por cada nueve entradas lanzadas. (se utilizo en el objetivo 2, 4 y 5.1 para comparar el rendimiento y evaluar la eficiencia)
+**WHIP (Walks plus Hits per Innings Pitched):** Número promedio de hits y bases por bola permitidos por entrada lanzada. Mide el control y el dominio de corredores en base.(se utilizo para el objetivo 2 y 5 como métrica de control y para clasificar los mejores pitchers)
+
+### **B. Métricas de participación y habilidad individual:** 
+Estas métricas sirven como variables independientes (participación/IP) y como herramientas de desambiguación de la efectividad (FIP).
+
+**IP (Innings Pitched):** Entradas lanzadas. Es la métrica de carga de trabajo o durabilidad. (Es la variable central de participación para los Objetivos 1, 2, 3 y 4. Define el grupo de estudio ("mayor participación").)
+
+**FIP (Fielding Independent Pitching):** Mide la efectividad del pitcher basándose solo en los resultados que controla (ponches, bases por bola y jonrones), eliminando la influencia de la defensa. (Se utiliza para el Objetivo 3 para garantizar un análisis completo y separar la habilidad pura de la suerte/defensa.)
+
+## **II. Enfoque Metodológico: Estadística Descriptiva y Relacional**
+El estudio empleará un diseño descriptivo y correlacional para cumplir con los objetivos.
+
+### **A. Determinación de Parámetros de Élite (Objetivo 2)**
+
+**1.Criterio de Selección:** Definir al grupo de "mayor participación" seleccionando a los pitchers con IP > 50 para garantizar que sean abridores con una participación constante.
+
+**2.Cálculo de Referencia:** Obtener las métricas ERA y WHIP Promedio de la MLB 2022 para establecer los puntos de referencia con los cuales se comparará el grupo élite.
+
+### **B. Herramientas de Análisis de Relación (Objetivo 1, 4)**
+Para determinar la existencia de una relación entre las variables, se utilizaron las siguientes técnicas:
+
+**-Análisis de correlación**
+**-Gráficos de dispersión**
+
+### **C. Análisis de Eficiencia y Desempeño Puro (Objetivo 3, 4)**
+**Análisis FIP vs. ERA (Objetivo 3):** Se comparará el FIP con el ERA para cada pitcher de alta participación. Una diferencia grande entre FIP y ERA indicará un fuerte efecto de la defensa o la suerte.
+
+¨**Eficiencia (Objetivo 4):** La eficiencia se evaluará observando si los pitchers con mayor durabilidad (IP) son también los más efectivos (ERA más bajo). Esto se puede visualizar en el gráfico ERA con respecto a IP.
+
+### **D. Clasificación (Objetivos 5, 5.1)**
+El estudio concluirá con una clasificación descriptiva del grupo de élite, utilizando las métricas de efectividad de ERA y WHIP para determinar quiénes fueron los más dominantes en el grupo de alta carga de trabajo.
 
 # *Análisis de datos*
 
 En este datatable podemos visualizar la información sin ningún filtro ni cambio realizado.
+```{r}
+summary(mlb_pitching)
+```
+
 
 ```{r data table}
 datatable(mlb_pitching, 
@@ -76,9 +123,7 @@ mlb_players <- mlb_pitching %>% group_by(Name) %>%
     IP, 
     ERA,
     WHIP,
-    W, 
-    L,
-    G,
+    FIP, 
   ) %>% arrange(ERA)
 datatable(mlb_players, options = list(
             scrolly = "300px"))
@@ -87,42 +132,57 @@ datatable(mlb_players, options = list(
 #seleccionamos todas las filas (a excepción de equipos)
 ```
 Una vez filtrado podemos comenzar con el verdadero analisis de este trabajo de investigación.
-
-## *Innings en base a la edad de los jugadores*
-
-```{r grafica1}
-ggplot(mlb_players, aes(x = Age, y = IP, fill())) + 
-  geom_point() +
-  stat_ellipse(type = "t") +
-  stat_ellipse(type = "norm", linetype = 2) + labs(title = "Relacion entre las entradas lanzadas y la edad",  x = "Edad de los pitchers", y = "Innings pitched/entradas lanzadas") +
-  theme_grey()
+```{r}
+summary(mlb_players)
 ```
 
+## *Participación en innings pitched en base a la edad de los jugadores*
+
+```{r grafica1}
+grafica1 <- ggplot(mlb_players, aes(x = Age, y = IP, fill())) + 
+  geom_point() + labs(title = "Relacion entre las entradas lanzadas y la edad",  x = "Edad de los pitchers", y = "Innings pitched/entradas lanzadas") +
+  theme_minimal()
+ggMarginal(
+  grafica1,
+  type = "histogram", 
+  margins = "x",      # Especifica que solo se añada en el eje X (la Edad)
+  fill = "steelblue",   # Color de relleno del histograma
+  color = "darkblue"
+)
+```
 
 Podemos visualizar que en el rango de edad donde se registraron mayor cantidad de inning/ entradas lanzadas fue entre los 25 a 30 años de edad, concentrandose con mayor frecuencia en un rango de entre 50 a 100 inning / entradas lanzadas.
 
-En base a esto los cálculos del trabajo estaran centrados en los los pitchers con una edad de entre 25 a 30 años de edad que mantengan una cantidad de entradas lanzadas de entre 50 a 100 debido a que se ha observado que es donde los valores tienen mayor concentración con respecto a el total de datos.
+Aunque no hay una correlación lineal fuerte, la relación entre edad y carga de trabajo es curvilínea, alcanzando su máximo de IP alrededor de los 30 años y disminuyendo notablemente en los lanzadores mayores a 35, con excepción de unos pocos jugadores de élite que mantienen un alto volumen.
 
-## *Top 5 de mejores pitchers de acuerdo al WHIP con respecto a la edad.*
+## *Comparativa de las métricas de efectividad (ERA y WHIP) con respecto a edad*
+### **Whip**
+Mide la cantidad promedio de corredores que un lanzador permite que lleguen a base (ya sea por hit o por base por bolas) por cada entrada que lanza.
+```{r best whip}
+best_whip <- mlb_players %>% arrange(WHIP, Age) %>% filter(WHIP < 1.5& Age > 20)
+datatable(best_whip)
 
-```{r top5 whip}
-top_5whip <- mlb_players %>% arrange(WHIP, Age) %>% head(5)
-datatable(top_5whip)
-ggplot(top_5whip, aes(x = Age, y = WHIP, fill())) + 
-  geom_point() +
-  stat_ellipse(type = "t") +
-  stat_ellipse(type = "norm", linetype = 5) + labs(title = "Relación entre el Whip y la edad",  x = "Edad de los pitchers", y = "WHIP") +
+grafica2 <- ggplot(best_whip, aes(x = Age, y = WHIP, fill())) + 
+  geom_point() + labs(title = "Relación entre Whip y la edad ", subtitle = "De los mejores pitchers en base a Whip",   x = "Edad de los pitchers", y = "WHIP") +
   theme_minimal()
+ggMarginal(
+  grafica2,
+  type = "histogram", 
+  margins = "x",      # Especifica que solo se añada en el eje X (la Edad)
+  fill = "steelblue",   # Color de relleno del histograma
+  color = "darkblue")
 ```
+Para filtrar los datos de forma que facilitaran el analisis de datos decidimos que aquellos jugadores condiderados como "mejores jugadores" se encuentran entre tener un Whip < 1.5 y mayores a una edad de 20 años.
+```{r grafica 3}
+top_5whip <- best_whip %>% arrange(WHIP, Age) %>% head(5)
 
-```{r grafica 2}
 ggplot(top_5whip, aes(x = reorder(Name, WHIP), y = WHIP)) +
   geom_col(fill = "steelblue") + geom_text(
     aes(label = paste0("WHIP: ", WHIP, "\nEdad: ", Age)),
     vjust = -0.5, # Ajusta la posición vertical (un poco arriba de la barra)
     size = 3.5
   ) + labs(
-    title = "Top 5 Pitchers por WHIP y Edad",
+    title = "Top 5 Pitchers por WHIP respecto a Edad",
     subtitle = "WHIP más bajo, desempatado por menor edad",
     x = "Pitcher",
     y = "Mejores Whip"
@@ -139,29 +199,25 @@ Con respecto a los resultados en las graficas podemos concluir que el mejor juga
 
 sin embargo los resultados no suponen la existencia entre una correlación directa entre ambas variables (Whip y edad) para asegurarnos de esto vamos a visualizar al total de pitchers y evaluar su whip junto a su edad.
 
-```{r grafica 3}
-ggplot(mlb_players, aes(x = Age, y = WHIP)) + 
-  geom_point() +
-  stat_ellipse(type = "t") +
-  stat_ellipse(type = "norm", linetype = 5) + labs(title = "Relación entre el Whip y la edad",  x = "Edad de los pitchers", y = "WHIP") +
+### **ERA**
+Mide la cantidad promedio de carreras limpias (es decir, carreras que no fueron causadas por errores defensivos) que un lanzador permite por cada nueve entradas (un juego completo) que lanza.
+```{r grafica 4}
+best_era<- mlb_players %>% arrange(ERA, Age) %>% filter(ERA < 4& Age > 20)
+datatable(best_era)
+grafica4 <- ggplot(best_era, aes(x = Age, y = ERA, fill())) + 
+  geom_point() + labs(title = "Relación entre ERA y la edad ", subtitle = "De los mejores pitchers en base a ERA",   x = "Edad de los pitchers", y = "ERA") +
   theme_minimal()
+ggMarginal(
+  grafica4,
+  type = "histogram", 
+  margins = "x",      # Especifica que solo se añada en el eje X (la Edad)
+  fill = "steelblue",   # Color de relleno del histograma
+  color = "darkblue")
 ```
-
-Efectivamente en este grafico no se puedevisualizar ningún tipo de correlación entre ambas variables.
-
-## *Observar el top 5 de mejores pitchers de acuerdo a ERA con respecto a la edad.*
 
 ```{r top5era}
-top_5era <- mlb_players %>% arrange(ERA, Age) %>% head(5)
-datatable(top_5era)
-ggplot(top_5era, aes(x = Age, y = ERA)) + 
-  geom_point() +
-  stat_ellipse(type = "t") +
-  stat_ellipse(type = "norm", linetype = 5) + labs(title = "Relacion entre la ERA y la edad",  x = "Edad de los pitchers", y = "ERA") +
-  theme_minimal()
-```
+top_5era <- best_era %>% arrange(ERA, Age) %>% head(5)
 
-```{r grafico 4}
 ggplot(top_5era, aes(x = reorder(Name, ERA), y = ERA)) +
   geom_col(fill = "steelblue") + geom_text(
     aes(label = paste0("ERA: ", ERA, "\nEdad: ", Age)),
@@ -179,38 +235,56 @@ ggplot(top_5era, aes(x = reorder(Name, ERA), y = ERA)) +
 #se ajusta un limite para la altura de y
 
 ```
+Entre los 5 mejores jugadores, ambas matrices (ERA y WHIP) comparten 3 jugadores los cuales son Evan phillips, Ryne Stanek y Emmanuel Clase a los cuales su rendimiento se podría evaluar como excepcional.
 
-Al igual que ocurrio con el Whip, la ERA no parece tener una relación directa con la edad de los jugadores. Por eso de igual manera se corroborara con el total de jugadores.
+*Comparando ambas metricas de efectividad podemos notar que:*
 
-```{r grafica 5}
-ggplot(mlb_players, aes(x = Age, y = ERA)) + 
-  geom_point() +
-  stat_ellipse(type = "t") +
-  stat_ellipse(type = "norm", linetype = 5) + labs(title = "Relacion entre la ERA y la edad",  x = "Edad de los pitchers", y = "ERA") +
-  theme_minimal()
+-En base al histograma de frecuencia en la parte superior de ambas gráficas, es prácticamente idéntico.
+
+-En ambas graficas la mayor concentración de pitchers de élite se encuentra en el rango de edad de 26 a 30 años, con un pico notable alrededor de los 26-28 años. Esto indica que la edad pico de rendimiento para los lanzadores más efectivos (ya sea por ERA o WHIP) se encuentra a finales de sus 20s.
+
+-Los puntos de datos (rendimiento individual) están muy dispersos a lo largo del eje Y (la métrica). Esto sugiere que, dentro de este grupo ya selecto, no existe una correlación lineal fuerte y visible entre la edad y la efectividad. Un lanzador de 25 años puede tener un ERA o WHIP tan bueno o malo como uno de 35 años.
+
+
+## *Relación entre la participación (IP) y la efectividad independiente en el “fildeo” (FIP)*
+```{r}
+ip_fip<- mlb_players %>% arrange(IP, FIP)
+datatable(ip_fip)
+
+ip_rang <- cut(ip_fip$IP, breaks = c(50, 70, 90, 110, 130, 150, 170,200,230), labels = c("(50, 70]", "(70, 90]", "(90, 110]","(110, 130]", "(130, 150]", "(150, 170]", "(170,200]", "(200, 230]"), include.lowest = TRUE, right = TRUE)
+
+ggplot(ip_fip, aes(x = ip_rang, y = FIP)) + geom_boxplot(fill= "darkorange", color = "gray30", alpha = 0.8) + labs(title = "Gráfico de Caja: Distribución del FIP según Rangos de IP", x = "Rangos de Entradas Lanzadas (IP)", y = "FIP") + theme_minimal()
+
 ```
-
-Al igual que en el caso anterior no se puede evidenciar una correlación directa de ningun tipo entre ambas variables.
-
-## *Relación entre los pitchers con menor ERA con respecto a partidos ganados.*
-
-```{r Era con G}
-era_vic <- mlb_players %>% arrange(ERA, G)
-datatable(era_vic)
-
-ggplot(era_vic, aes(x = ERA, y = G)) + 
-  geom_point() +
-  labs(title = "Relacion entre la ERA y los juegos ganados",  x = "ERA", y = "Juegos ganados") +
-  theme_minimal()
-```
-
-En primer lugar se puede observar claramente que la mayor cantidad de juegos ganados se encuentra entre los jugadores con una ERA de entre 1,14 hasta 3. 
+El gráfico sugiere una relación entre la participación (IP) y la calidad/consistencia (FIP). A medida que el volumen de IP aumenta, el FIP mediano y la variabilidad tienden a disminuir, con los lanzadores de mayor volumen (200-230 IP) mostrando el FIP mediano más bajo y más consistente de todos los grupos.
 
 ##  *Pitchers con mejor ERA respecto a innings lanzados.*
 
 ```{r ERA IP}
-era_ip <- mlb_players %>% arrange(ERA, IP)
+era_ip <- mlb_players %>% arrange(ERA, IP) %>% filter(ERA<4)
 
 datatable(era_ip)
+
+graficeip <- ggplot(era_ip, aes(x = ERA, y = IP, fill())) + 
+  geom_point() + labs(title = "Relación entre ERA y la participación (IP) ", subtitle = "pitchers más eficientes de acuerdo a su participación",   x = "ERA", y = "IP") +
+  theme_minimal()
+ggMarginal(
+  graficeip,
+  type = "histogram", 
+  margins = "x",      # Especifica que solo se añada en el eje X (la Edad)
+  fill = "steelblue",   # Color de relleno del histograma
+  color = "darkblue")
 ```
+Los pitchers de menor participación son los que más frecuentemente alcanzan los ERA más bajos (por debajo de 2.5), aunque su rendimiento tiene una mayor dispersión (desde 1.0 hasta 4.0).
+
+Mientras que los pitcher de mayor participación muestran una mayor consistencia en el volumen de ERA, con pocos outliers, lo que refleja que es extremadamente difícil mantener un ERA de élite (por debajo de 2.5) a lo largo de un volumen completo de Entradas Lanzadas.
+
+## *Top 10 de los pitchers con mayor participación en la MLB 2022 ordenándolos según su ERA.*
+
+```{r}
+top_10era <- mlb_players %>% arrange(ERA) %>% head(10)
+datatable(top_10era)
+```
+
+Se puede observar como el Top 10 de los jugadores con mejor ERA (menor) tienen edades variadas y unos valores de WHIP y FIP bastante bajos, lo que deja en evidencia su rendimiento excepcional.
 
